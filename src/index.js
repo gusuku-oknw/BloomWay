@@ -1,9 +1,5 @@
 import React from 'react';
-<<<<<<< HEAD
 import ReactDOM from 'react-dom';
-=======
-import ReactDOM from 'react-dom/client';
->>>>>>> f7a2304 (Initialize project using Create React App)
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
