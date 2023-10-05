@@ -13,7 +13,7 @@ function App() {
     <Router> {/* <Router> コンポーネントを追加 */}
       <div className="App">
         <header>
-          <h1>アプリケーションのタイトル</h1>
+          <h1>BloomWay</h1>
         </header>
         <main>
           <Routes>
