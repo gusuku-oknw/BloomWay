@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
 import ScheduleCalendar from './components/ScheduleCalendar';
 import Home from './components/Home'
+import GoogleMapComponent from './components/GoogleMapComponent';
 import GlobalMenu from './components/GlobalMenu';
 
 function App() {
@@ -16,7 +17,7 @@ function App() {
         </header>
         <main>
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<GoogleMapComponent />} />
             <Route path="/schedule" element={<ScheduleCalendar />} />
             {/* 他のルートを追加 */}
           </Routes>
