@@ -7,23 +7,25 @@ import ScheduleCalendar from './components/ScheduleCalendar';
 import Home from './components/Home'
 import GoogleMapComponent from './components/GoogleMapComponent';
 import GlobalMenu from './components/GlobalMenu';
+import SurveyWithFlicking from "./SurveyWithFlicking";
 
 function App() {
   return (
     <Router> {/* <Router> コンポーネントを追加 */}
       <div className="App">
         <header>
-          <h1>BloomWay</h1>
+          <h1>Reposit</h1>
         </header>
         <main>
-          <Routes>
-            <Route path="/" element={<GoogleMapComponent />} />
-            <Route path="/schedule" element={<ScheduleCalendar />} />
-            {/* 他のルートを追加 */}
-          </Routes>
+          {/*<Routes>*/}
+          {/*  <Route path="/" element={<GoogleMapComponent />} />*/}
+          {/*  <Route path="/schedule" element={<ScheduleCalendar />} />*/}
+          {/*  /!* 他のルートを追加 *!/*/}
+          {/*</Routes>*/}
+          <SurveyWithFlicking />
         </main>
         <footer>
-          <GlobalMenu /> {/* グローバルメニューを画面の下に配置 */}
+          {/*<GlobalMenu /> /!* グローバルメニューを画面の下に配置 *!/*/}
         </footer>
       </div>
     </Router>

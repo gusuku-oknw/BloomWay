@@ -1,19 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/api';
-import HospitalDetails from './HospitalDetails'; // 別のコンポーネントをインポート
 
 const containerStyle = {
-  width: '95%',
-  height: '650px'
+  width: '400px',
+  height: '400px'
 };
 
 const center = {
-  lat: 35.681294, 
-  lng: 139.765709,
+  lat: -3.745,
+  lng: -38.523
 };
 
 const GoogleMapComponent = () => {
-  const [hospitals, setHospitals] = useState([]);
   const [selectedHospital, setSelectedHospital] = useState(null);
   const mapStyles = [
       {
@@ -105,18 +103,22 @@ const GoogleMapComponent = () => {
       }
   ];
   
-// useEffectを使用してAPIから病院のデータを取得
-  useEffect(() => {
-  // APIエンドポイントは変更する必要があります
-  fetch('/api/hospitals')
-    .then(res => res.json())
-    .then(data => setHospitals(data))
-    .catch(error => console.error('Error fetching hospitals:', error));
-}, []);
+  // 病院の位置データの例です。実際のデータに合わせて変更してください。
+  const hospitals = [
+    {
+      name: "Hospital A",
+      location: { lat: -3.745, lng: -38.523 }
+    },
+    {
+      name: "Hospital B",
+      location: { lat: -3.755, lng: -38.513 }
+    }
+    // ... 他の病院データ
+  ];
+
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-      <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}>
-        <GoogleMap
+    <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}>
+    <GoogleMap
           mapContainerStyle={containerStyle}
           center={center}
           zoom={10}
@@ -126,21 +128,32 @@ const GoogleMapComponent = () => {
             zoomControl: false,        // 拡大縮小ボタンを非表示にする
             mapTypeControl: false      // 地図タイプボタン（地図/航空写真の切り替えボタン）を非表示にする
           }}
-          >
-            {hospitals.map(hospital => (
-              <Marker
-                key={hospital.name}
-                position={hospital.location}
-                onClick={() => {
-                  setSelectedHospital(hospital);
-                }}
-              />
-            ))}
-        </GoogleMap>
-      </LoadScript>
+        >
+        {hospitals.map(hospital => (
+          <Marker
+            key={hospital.name}
+            position={hospital.location}
+            onClick={() => {
+              setSelectedHospital(hospital);
+            }}
+          />
+        ))}
 
-      {selectedHospital && <HospitalDetails hospital={selectedHospital} />}
-    </div>
+        {selectedHospital && (
+          <InfoWindow
+            position={selectedHospital.location}
+            onCloseClick={() => {
+              setSelectedHospital(null);
+            }}
+          >
+            <div>
+              <h2>{selectedHospital.name}</h2>
+              <p>This is a description about the hospital.</p>
+            </div>
+          </InfoWindow>
+        )}
+      </GoogleMap>
+    </LoadScript>
   );
 }
 

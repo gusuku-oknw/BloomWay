@@ -1,9 +1,7 @@
 // src/components/GlobalMenu.js
 
 import React, { useEffect, useState }  from 'react';
-import { AiFillSchedule, AiFillSetting } from "react-icons/ai"
-import { BsMapFill } from "react-icons/bs"
-
+import { AiFillHome, AiFillSchedule, AiFillSetting } from "react-icons/ai"
 import ScheduleCalendar from './ScheduleCalendar'
 
 const GlobalMenu = () => {
@@ -79,9 +77,9 @@ const GlobalMenu = () => {
       <ul style={styles.ul}>
         <li>
           <a href="/" style={styles.menuItem}>
-            <BsMapFill style={styles.menuIcon} />
+            <AiFillHome style={styles.menuIcon} />
             <span onClick={() => handleTabClick('ScheduleCalendar')}>
-                マップ
+                Home
             </span>
           </a>
         </li>
@@ -89,14 +87,14 @@ const GlobalMenu = () => {
           <a href="/schedule" style={styles.menuItem}>
             <AiFillSchedule style={styles.menuIcon} />
             <span onClick={() => handleTabClick('ScheduleCalendar')}>
-                予約
+                Schedule
             </span>
           </a>
         </li>
         <li>
           <a href="/about" style={styles.menuItem}>
           <AiFillSetting style={styles.menuIcon} />
-          <span>設定</span>
+          <span>Setting</span>
           </a>
         </li>
         {/* 他のメニューアイテムも同様に追加 */}
