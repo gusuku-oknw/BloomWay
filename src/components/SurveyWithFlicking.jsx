@@ -38,6 +38,7 @@ export default function SurveyWithFlicking() {
         <Flicking
             ref={flickingRef}
             align="center"
+
             circular={false}
             bounce="0" bound={true}
             onMoveEnd={e => {
