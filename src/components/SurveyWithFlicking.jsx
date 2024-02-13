@@ -1,91 +1,63 @@
-import React, { useState, useRef } from 'react';
-import { Div, Button } from "atomize";
-import Flicking from "@egjs/react-flicking";
-import "@egjs/react-flicking/dist/flicking.css";
+import React, { useState } from 'react';
+import { Div, Button, Textarea } from "atomize";
+import { FaStar } from 'react-icons/fa';
 
-export default function SurveyWithFlicking() {
+const FinalSurvey = ({ onSubmit }) => {
     const [panels, setPanels] = useState([
-        { question: "質問1", options: ["選択肢1", "選択肢2", "選択肢3", "選択肢4"], selectedOptionIndex: null },
-        { question: "質問2", options: ["選択肢A", "選択肢B", "選択肢C", "選択肢D"], selectedOptionIndex: null },
-        { question: "質問3", options: ["選択肢X", "選択肢Y", "選択肢Z", "選択肢W"], selectedOptionIndex: null },
+        { question: "質問1", rating: 0 },
+        { question: "質問2", rating: 0 },
+        { question: "質問3", rating: 0 },
     ]);
 
-    const flickingRef = useRef(null);
+    const [feedback, setFeedback] = useState('');
 
-    const moveToNextPanel = (panelIndex, optionIndex) => {
-        const updatedPanels = panels.map((panel, idx) => {
-            if (idx === panelIndex) {
-                return { ...panel, selectedOptionIndex: optionIndex };
-            }
-            return panel;
-        });
-
+    const setRating = (index, rating) => {
+        const updatedPanels = [...panels];
+        updatedPanels[index].rating = rating;
         setPanels(updatedPanels);
+    };
 
-        const flicking = flickingRef.current;
-        if (flicking) {
-            const nextIndex = flicking.index + 1;
-            if (nextIndex < panels.length) {
-                flicking.moveTo(nextIndex).catch(e => console.error("Failed to move:", e));
-            } else {
-                // アンケート終了後の処理
-                alert("アンケート終了！");
-            }
-        }
+    const submitFeedback = () => {
+        // フィードバックの送信や保存のロジックをここに実装
+        onSubmit({ panels, feedback });
     };
 
     return (
-        <Flicking
-            ref={flickingRef}
-            align="center"
-
-            circular={false}
-            bounce="0" bound={true}
-            onMoveEnd={e => {
-                console.log("Moved to panel", e.index);
-            }}>
-            {panels.map((panel, panelIndex) => (
-                // 外側のDivにマージンを追加して隙間を作成
-                <Div
-                    w='85vw'
-                    m="1rem"
-                >
-                    <Div
-                        bg="info200"
-                        rounded="lg"
-                        w='85vw'
-                        h='50vw'
-                        p={{ t: "2rem", b: "2rem" }}
-                        d="flex"
-                        flexDir="column"
-                        align="center"
-                        justify="start"
-                        key={panelIndex}>
-                        <h2 style={{ width: '100%', textAlign: 'center', marginBottom: '2rem' }}>{panel.question}</h2>
-                        <Div
-                            d="flex"
-                            flexWrap="wrap"
-                            justify="space-around"
-                            align="center"
-                            w="100%">
-                            {panel.options.map((option, optionIndex) => (
-                                <Button
-                                    key={optionIndex}
-                                    onClick={() => moveToNextPanel(panelIndex, optionIndex)}
-                                    bg={panel.selectedOptionIndex === optionIndex ? "success700" : "info700"}
-                                    hoverBg={panel.selectedOptionIndex === optionIndex ? "success600" : "info600"}
-                                    rounded="md"
-                                    m={{ b: "1rem", r: "0.5rem", l: "0.5rem" }}
-                                    p={{ x: "1.5rem", y: "1.5rem" }}
-                                    w="calc(50% - 1rem)"
-                                >
-                                    {option}
-                                </Button>
-                            ))}
-                        </Div>
+        <Div p="2rem" d="flex" flexDir="column" align="center">
+            {panels.map((panel, index) => (
+                <Div key={index} d="flex" align="center" m={{b: "1rem"}}>
+                    <Div>{panel.question}</Div>
+                    <Div d="flex" align="center" p="1rem">
+                        {/* 星の評価を表示 */}
+                        {[...Array(5)].map((_, starIndex) => (
+                            <FaStar
+                                key={starIndex}
+                                color={starIndex < panel.rating ? "#ffc107" : "#e4e5e9"}
+                                size="20px"
+                                cursor="pointer"
+                                onClick={() => setRating(index, starIndex + 1)}
+                            />
+                        ))}
                     </Div>
                 </Div>
             ))}
-        </Flicking>
+            <Textarea
+                value={feedback}
+                onChange={(e) => setFeedback(e.target.value)}
+                placeholder="フィードバックをお聞かせください"
+                m={{ t: "1rem" }}
+                p="0.5rem"
+            />
+            <Button
+                onClick={submitFeedback}
+                bg="info700"
+                hoverBg="info600"
+                m={{ t: "1rem" }}
+            >
+                送信
+            </Button>
+        </Div>
     );
-}
+};
+
+export default FinalSurvey;
