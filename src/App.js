@@ -7,7 +7,7 @@ import ScheduleCalendar from './components/ScheduleCalendar';
 import Home from './components/Home'
 import GoogleMapComponent from './components/GoogleMapComponent';
 import GlobalMenu from './components/GlobalMenu';
-import SurveyWithFlicking from "./components/SurveyWithFlicking";
+import SurveyWithFlicking from "./components/ChoicesWithFlicking";
 
 function App() {
   return (
