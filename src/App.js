@@ -1,6 +1,7 @@
 // src/App.js
 
 import React from 'react';
+import { Div } from "atomize";
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
 import ScheduleCalendar from './components/ScheduleCalendar';
@@ -14,7 +15,19 @@ function App() {
     <Router> {/* <Router> コンポーネントを追加 */}
       <div className="App">
         <header>
-          <h1>Reposit</h1>
+          <Div
+              bg="gray200"
+              d="flex"
+              align="center"
+              justify="center"
+              textSize="display1"
+              textWeight="500"
+              textColor="info500"
+
+              p="1rem"
+          >
+            Reposit
+          </Div>
         </header>
         <main>
           {/*<Routes>*/}

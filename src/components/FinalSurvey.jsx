@@ -20,6 +20,7 @@ const FinalSurvey = ({ onSubmit }) => {
     const submitFeedback = () => {
         // フィードバックの送信や保存のロジックをここに実装
         onSubmit({ panels, feedback });
+        console.log(onSubmit({ panels, feedback }))
     };
 
     return (
@@ -50,8 +51,8 @@ const FinalSurvey = ({ onSubmit }) => {
             />
             <Button
                 onClick={submitFeedback}
-                bg="info700"
-                hoverBg="info600"
+                bg="info500"
+                hoverBg="info300"
                 m={{ t: "1rem" }}
             >
                 送信
