@@ -1,0 +1,48 @@
+/* src/components/ScheduleCalendar.css */
+
+.schedule-calendar {
+  text-align: center;
+}
+
+.table-container {
+  overflow-x: auto; /* モバイル表示時に横スクロールが可能になるように */
+  margin: 0 auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  min-width: 50px; /* モバイルでの最小幅を設定 */
+}
+
+th {
+  background-color: #f0f0f0;
+}
+
+.lecture-cell {
+  background-color: #FF1493;
+}
+
+.empty-cell {
+  background-color: #f0f0f0;
+  color: #ccc;
+}
+
+.time-cell {
+  font-weight: bold;
+}
+
+@media (max-width: 375px) {
+  .schedule-calendar.mobile table th,
+  .schedule-calendar.mobile table td {
+    padding: 5px;
+    font-size: 12px;
+  }
+}
+
+/* 他のスタイリング */
