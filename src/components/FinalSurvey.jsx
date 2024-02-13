@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { Div, Button, Textarea } from "atomize";
 import { FaStar } from 'react-icons/fa';
+import useBackEndFetch from "./useBackEndFetch";
 
 const FinalSurvey = ({ onSubmit }) => {
+    const { sendRequest, isLoading, error, data } = useBackEndFetch();
+
     const [panels, setPanels] = useState([
         { question: "質問1", rating: 0 },
         { question: "質問2", rating: 0 },
@@ -17,13 +20,14 @@ const FinalSurvey = ({ onSubmit }) => {
         setPanels(updatedPanels);
     };
 
-    const submitFeedback = () => {
+    const submitFeedback = async () => {
         // フィードバックの送信や保存のロジックをここに実装
         onSubmit({ panels, feedback });
-        console.log(onSubmit({ panels, feedback }))
+        await sendRequest(`/ChoicesFeedback`, { panels, feedback });
     };
 
     return (
+        <>
         <Div p="2rem" d="flex" flexDir="column" align="center">
             {panels.map((panel, index) => (
                 <Div key={index} d="flex" align="center" m={{b: "1rem"}}>
@@ -58,6 +62,7 @@ const FinalSurvey = ({ onSubmit }) => {
                 送信
             </Button>
         </Div>
+        </>
     );
 };
 

@@ -17,9 +17,14 @@ export default function ChoicesWithFlicking() {
     ]);
 
     const [isSurveyFinished, setIsSurveyFinished] = useState(false);
+    const [isQuestionnaire, setIsQuestionnaire] = useState(false);
 
     const flickingRef = useRef(null);
-
+    // isQuestionnaireをtrueに設定する関数
+    const handleButtonClick = () => {
+        // return <FinalSurvey onSubmit={(data) => console.log(data)} />
+        setIsQuestionnaire(true);
+    };
     const moveToNextPanel = async (panelIndex, optionIndex) => {
         // 選択肢の選択を更新
         const updatedPanels = panels.map((panel, idx) => {
@@ -46,6 +51,10 @@ export default function ChoicesWithFlicking() {
         }
     };
 
+    if (isQuestionnaire) {
+        return <FinalSurvey onSubmit={(data) => console.log(data)} />;
+    }
+
     // アンケート終了後の処理（結果表示など）
     if (isSurveyFinished) {
         return (
@@ -55,11 +64,8 @@ export default function ChoicesWithFlicking() {
                 {data && (
                     <Div>
                         <p>Thank you for your participation!</p>
-                        {/* ここでバックエンドからのデータを表示 */}
                         <p>{data.message}</p>
-                        {/* 例えば、追加のデータがあればここに表示 */}
                         {data.additionalData && <p>追加情報: {data.additionalData}</p>}
-                        {/* ダミーデータを例として、更に詳細な情報を表示する場合 */}
                         {data.details && (
                             <Div>
                                 <p>詳細情報:</p>
@@ -70,14 +76,20 @@ export default function ChoicesWithFlicking() {
                                 </ul>
                             </Div>
                         )}
+                        <Div
+                            d="flex"
+                            align="center"
+                            justify="center"
+                            style={{ width: '100%', height: '100vh' }}
+                        >
+                            <Button onClick={handleButtonClick}>
+                                アンケートを開始
+                            </Button>
+                        </Div>
                     </Div>
                 )}
             </Div>
         );
-    }
-
-    if (isSurveyFinished) {
-        return <FinalSurvey onSubmit={(data) => console.log(data)} />;
     }
 
     return (
