@@ -11,9 +11,10 @@ export default function ChoicesWithFlicking() {
     const { sendRequest, isLoading, error, data } = useBackEndFetch();
 
     const [panels, setPanels] = useState([
-        { question: "質問1", options: ["選択肢1", "選択肢2"], selectedOptionIndex: null },
+        { question: "年齢は？", options: ["20代", "30代"], selectedOptionIndex: null },
         { question: "質問2", options: ["選択肢A", "選択肢B", "選択肢C", "選択肢D"], selectedOptionIndex: null },
         { question: "質問3", options: ["選択肢X", "選択肢Y", "選択肢Z", "選択肢W"], selectedOptionIndex: null },
+        // { question: "質問3", options: ["選択肢X", "選択肢Y", "選択肢Z", "選択肢W"], selectedOptionIndex: null },
     ]);
 
     const [isSurveyFinished, setIsSurveyFinished] = useState(false);

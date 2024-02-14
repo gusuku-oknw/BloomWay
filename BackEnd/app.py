@@ -1,5 +1,6 @@
 import logging
 import os
+from datetime import datetime
 from urllib.parse import quote_plus
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Integer, String, Text, Date
@@ -12,7 +13,7 @@ from flask_cors import CORS
 #
 # load_dotenv()
 
-app = Flask(__name__, static_folder="../frontend/build/static", template_folder="../frontend/build")
+app = Flask(__name__, static_folder="../FrontEnd/build/static", template_folder="../FrontEnd/build")
 CORS(app)
 
 # username = os.environ.get('DB_USERNAME')
@@ -21,10 +22,11 @@ CORS(app)
 # port = os.environ.get('DB_PORT')
 # database = os.environ.get('DB_DATABASE')
 #
-# app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{username}:{password}@{host}/{database}'
+app.config[
+    'SQLALCHEMY_DATABASE_URI'] = 'postgresql://jun:G2eJxULFS0M3RufmS3gqSMli3OdoJLgA@dpg-cn6a0cq1hbls73c88cg0-a.oregon-postgres.render.com/feedback_jd74'
 # app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # app.config['JSON_AS_ASCII'] = False
-# db = SQLAlchemy(app)
+db = SQLAlchemy(app)
 Base = declarative_base()
 # ログレベルを設定
 app.logger.setLevel(logging.DEBUG)  # 任意のログレベルを選択
@@ -33,8 +35,35 @@ handler = logging.StreamHandler()
 app.logger.addHandler(handler)
 
 
-# with app.app_context():
-#     db.create_all()
+class Feedback(db.Model):
+    __tablename__ = 'feedbacks'
+
+    id = db.Column(db.Integer, primary_key=True)
+    general = db.Column(db.String(500), nullable=False)
+    performance = db.Column(db.String(500), nullable=True)
+    usability = db.Column(db.String(500), nullable=True)
+    star_panel_ratings = db.relationship('StarPanelRating', backref='feedback', lazy='dynamic')
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __repr__(self):
+        return f"<Feedback {self.id}>"
+
+
+class StarPanelRating(db.Model):
+    __tablename__ = 'star_panel_ratings'
+
+    id = db.Column(db.Integer, primary_key=True)
+    question = db.Column(db.String(255), nullable=False)
+    rating = db.Column(db.Integer, nullable=False)
+    feedback_id = db.Column(db.Integer, db.ForeignKey('feedbacks.id'), nullable=False)
+
+    def __repr__(self):
+        return f"<StarPanelRating {self.id}, Feedback {self.feedback_id}>"
+
+
+with app.app_context():
+    db.create_all()
+
 
 @app.route('/')
 def index():
@@ -44,9 +73,12 @@ def index():
 @app.route('/ChoicesPersonal', methods=['GET', 'POST'])
 def get_personal():
     try:
-        articles = Article.query.all()
-        articles_json = [serialize_article(article) for article in articles]
-        return jsonify(articles_json)
+        # articles = Article.query.all()
+        # articles_json = [serialize_article(article) for article in articles]
+        personal_json = {
+            'message': "セラミドとトラネキサム酸　※実際の結果とは異なります。",
+        }
+        return jsonify(personal_json)
     except Exception as e:
         print(f"An error occurred: {e}")
         # You might want to return an error message or code here
@@ -55,44 +87,36 @@ def get_personal():
 
 @app.route('/ChoicesFeedback', methods=['GET', 'POST'])
 def get_feedback():
-    try:
-        articles = Article.query.all()
-        articles_json = [serialize_article(article) for article in articles]
-        return jsonify(articles_json)
-    except Exception as e:
-        print(f"An error occurred: {e}")
-        # You might want to return an error message or code here
-        return jsonify({"error": "Could not fetch articles"}), 500
-
-
-def serialize_article(article):
-    def time_to_seconds(time_str, back_time=20):
+    if request.method == 'POST':
         try:
-            clean_time_str = time_str.strip().strip('{}')
-            parts = [int(part) for part in clean_time_str.split(':')]
-            if len(parts) == 2:  # Format is M:S
-                return parts[0] * 60 + parts[1] + back_time
-            elif len(parts) == 3:  # Format is H:M:S
-                return parts[0] * 3600 + parts[1] * 60 + parts[2] + back_time
-            else:
-                return 0  # Format error or empty string
-        except ValueError:
-            print(f"Error converting time: {time_str}. Ensure it's in H:M:S or M:S format.")
-            return 0
+            data = request.json
+            feedbacks = data.get('feedbacks')
+            starPanels = data.get('starPanels')
 
-    start_times = [time_to_seconds(time) for time in article.populartimes] if article.populartimes else []
-    return {
-        "id": article.id,
-        "title": article.title,
-        "summary": article.summary,
-        "thumbnailurl": article.thumbnailurl,
-        "publishedat": article.publishedat,
-        "populartimes": article.populartimes,
-        "startTimes": start_times,
-        "videoid": article.videoid,
-        "viewershipdata": article.viewershipdata,
-        "articlelink": article.articlelink
-    }
+            # Feedbackデータの保存
+            feedback = Feedback(general=feedbacks.get('general'),
+                                performance=feedbacks.get('performance'),
+                                usability=feedbacks.get('usability'),
+                                created_at=datetime.utcnow())
+            db.session.add(feedback)
+            db.session.flush()  # IDを取得するためにフラッシュする
+
+            # StarPanelRatingsデータの保存
+            for starPanel in starPanels:
+                star_rating = StarPanelRating(question=starPanel['question'],
+                                              rating=starPanel['rating'],
+                                              feedback_id=feedback.id)
+                db.session.add(star_rating)
+
+            db.session.commit()
+
+            return jsonify({'message': 'Feedback successfully saved'}), 200
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({'message': 'Error saving feedback', 'error': str(e)}), 500
+    else:
+        # GETリクエストの場合の処理（必要に応じて）
+        return jsonify({'message': 'This route supports only POST method'}), 405
 
 
 if __name__ == '__main__':
