@@ -30,24 +30,24 @@ const useBackEndFetch = () => {
             return;
         }
 
-        // if (endpoint === '/ChoicesFeedback') {
-        //     setTimeout(() => { // ネットワークリクエストの遅延をシミュレート
-        //         try {
-        //             // ダミーデータ
-        //             const dummyData = {
-        //                 message: "Your choices have been recorded successfully!",
-        //                 // ダミーの詳細データなど
-        //             };
-        //             console.log(args)
-        //             setData(dummyData);
-        //             setIsLoading(false);
-        //         } catch (error) {
-        //             setError("Error during data fetch: " + error.message);
-        //             setIsLoading(false);
-        //         }
-        //     }, 1000); // 1秒後にダミーデータをセット
-        //     return;
-        // }
+        if (endpoint === '/ChoicesFeedback') {
+            setTimeout(() => { // ネットワークリクエストの遅延をシミュレート
+                try {
+                    // ダミーデータ
+                    const dummyData = {
+                        message: "Your choices have been recorded successfully!",
+                        // ダミーの詳細データなど
+                    };
+                    console.log(args)
+                    setData(dummyData);
+                    setIsLoading(false);
+                } catch (error) {
+                    setError("Error during data fetch: " + error.message);
+                    setIsLoading(false);
+                }
+            }, 1000); // 1秒後にダミーデータをセット
+            return;
+        }
 
         try {
             const response = await fetch(endpoint, {

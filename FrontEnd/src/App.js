@@ -5,10 +5,8 @@ import { Div } from "atomize";
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
 import ScheduleCalendar from './components/ScheduleCalendar';
-import Home from './components/Home'
-import GoogleMapComponent from './components/GoogleMapComponent';
-import GlobalMenu from './components/GlobalMenu';
 import SurveyWithFlicking from "./components/ChoicesWithFlicking";
+import ThankYou from "./components/ThankYou";
 
 function App() {
   return (
@@ -30,12 +28,11 @@ function App() {
           </Div>
         </header>
         <main>
-          {/*<Routes>*/}
-          {/*  <Route path="/" element={<GoogleMapComponent />} />*/}
-          {/*  <Route path="/schedule" element={<ScheduleCalendar />} />*/}
-          {/*  /!* 他のルートを追加 *!/*/}
-          {/*</Routes>*/}
-          <SurveyWithFlicking />
+          <Routes>
+            <Route path="/" element={<SurveyWithFlicking />} />
+            <Route path="/thankYou" element={<ThankYou />} />
+            {/* 他のルートを追加 */}
+          </Routes>
         </main>
         <footer>
           {/*<GlobalMenu /> /!* グローバルメニューを画面の下に配置 *!/*/}

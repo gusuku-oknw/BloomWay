@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import { Div, Button, Textarea } from "atomize";
 import { FaStar } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom'; // useNavigateをインポート
+
 import useBackEndFetch from "./useBackEndFetch";
 
 const FinalSurvey = ({ onSubmit }) => {
+    const navigate = useNavigate(); // useNavigateフックを使用してnavigate関数を取得
+
     const { sendRequest, isLoading, error, data } = useBackEndFetch();
 
     const [starPanels, setStarPanels] = useState([
@@ -36,6 +40,11 @@ const FinalSurvey = ({ onSubmit }) => {
         // フィードバックの送信や保存のロジックをここに実装
         onSubmit({ starPanels, feedbacks });
         await sendRequest(`/ChoicesFeedback`, { starPanels, feedbacks });
+        if (data) {
+            navigate('/thankYou');
+        } else if (error) {
+            console.error('An error occurred:', error);
+        }
     };
 
     return (
