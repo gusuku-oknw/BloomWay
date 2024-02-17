@@ -5,15 +5,15 @@ import "@egjs/react-flicking/dist/flicking.css";
 
 import FinalSurvey from "./FinalSurvey";
 import useBackEndFetch from "./useBackEndFetch";
-import Loading2 from "./Loading2";
+import SurveyFinished from "./SurveyFinished";
 
 export default function ChoicesWithFlicking() {
     const { sendRequest, isLoading, error, data } = useBackEndFetch();
 
     const [panels, setPanels] = useState([
         { question: "年齢は？", options: ["20代", "30代"], selectedOptionIndex: null },
-        { question: "質問2", options: ["選択肢A", "選択肢B", "選択肢C", "選択肢D"], selectedOptionIndex: null },
-        { question: "質問3", options: ["選択肢X", "選択肢Y", "選択肢Z", "選択肢W"], selectedOptionIndex: null },
+        { question: "肌悩みは?", options: ["敏感肌", "乾燥", "シワ・たるみ", "シミ・くすみ", "毛穴・ニキビ"], selectedOptionIndex: null },
+        { question: "肌はかさつきやすいですか？", options: ["カサつきを繰り返している", "たまにカサつく", "カサつかない"], selectedOptionIndex: null },
         // { question: "質問3", options: ["選択肢X", "選択肢Y", "選択肢Z", "選択肢W"], selectedOptionIndex: null },
     ]);
 
@@ -59,37 +59,12 @@ export default function ChoicesWithFlicking() {
     // アンケート終了後の処理（結果表示など）
     if (isSurveyFinished) {
         return (
-            <Div>
-                {isLoading && <Loading2 />}
-                {error && <p>Error: {error}</p>}
-                {data && (
-                    <Div>
-                        <p>Thank you for your participation!</p>
-                        <p>{data.message}</p>
-                        {data.additionalData && <p>追加情報: {data.additionalData}</p>}
-                        {data.details && (
-                            <Div>
-                                <p>詳細情報:</p>
-                                <ul>
-                                    {data.details.map((detail, index) => (
-                                        <li key={index}>{detail}</li>
-                                    ))}
-                                </ul>
-                            </Div>
-                        )}
-                        <Div
-                            d="flex"
-                            align="center"
-                            justify="center"
-                            style={{ width: '100%', height: '100vh' }}
-                        >
-                            <Button onClick={handleButtonClick}>
-                                アンケートを開始
-                            </Button>
-                        </Div>
-                    </Div>
-                )}
-            </Div>
+            <SurveyFinished
+                isLoading={isLoading}
+                error={error}
+                data={data}
+                handleButtonClick={handleButtonClick}
+            />
         );
     }
 
@@ -105,19 +80,21 @@ export default function ChoicesWithFlicking() {
             {panels.map((panel, panelIndex) => (
                 <Div
                     w='85vw'
+                    h='80rem'
                     m="1rem"
                 >
                     <Div
-                        bg="info200"
+                        bg='brand100'
                         rounded="lg"
                         w='85vw'
-                        h='80vw'
+                        h='50vh'
                         p={{ t: "2rem", b: "2rem" }}
                         d="flex"
                         flexDir="column"
                         align="center"
                         justify="start"
-                        key={panelIndex}>
+                        key={panelIndex}
+                    >
                         <Div
                             textAlign="center"
                             textWeight="800"
@@ -137,13 +114,13 @@ export default function ChoicesWithFlicking() {
                                 <Button
                                     key={optionIndex}
                                     onClick={() => moveToNextPanel(panelIndex, optionIndex)}
-                                    bg={panel.selectedOptionIndex === optionIndex ? "success700" : "info700"}
+                                    bg={panel.selectedOptionIndex === optionIndex ? "success300" : "info400"}
                                     hoverBg={panel.selectedOptionIndex === optionIndex ? "success600" : "info600"}
                                     rounded="md"
                                     m={{ b: "1rem", r: "0.5rem", l: "0.5rem" }}
                                     p={{ x: "1.5rem", y: "1.5rem" }}
                                     w={panel.options.length === 2 ? "100%" : "calc(50% - 1rem)"} // 2x1の場合は全幅、2x2の場合は半分の幅
-                                    h="auto"
+                                    h={panel.options.length <= 4 ? "100%" : panel.options.length >= 5 ? "calc((100% - (1rem * (panel.options.length - 1))) / Math.ceil(panel.options.length / 2))" : "calc(50% - 1rem)"} // 選択肢の数に応じて高さを動的に計算
                                     minH="6.5rem" // 最小高さを保持
                                     maxH="10rem" // 最大高さを指定
                                     textSize="subheader"
