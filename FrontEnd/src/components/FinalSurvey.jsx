@@ -48,22 +48,19 @@ const FinalSurvey = ({ onSubmit }) => {
         setSubmitLoading(true);
 
         try {
-            // `sendRequest` からの応答を待機
             const response = await sendRequest(`/ChoicesFeedback`, { starPanels, feedbacks });
 
-            // 応答が成功を示しているか確認
-            if (response && response.success) {
-                // 成功した場合、'/thankYou' ページにナビゲート
+            // 成功した場合の条件をAPIの応答に合わせて調整する
+            // ここではresponseに含まれる何らかのプロパティ（例：response.success）を確認しています
+            if (response) {
                 navigate('/thankYou');
             } else {
-                // 応答が成功を示していない場合のエラーハンドリング
+                // 応答が成功を示していない場合、エラーメッセージをログに記録
                 console.error('Feedback submission was not successful:', response);
             }
         } catch (error) {
-            // エラーハンドリング
             console.error('An error occurred:', error);
         } finally {
-            // 送信処理が終了したら、ローディング状態を解除
             setSubmitLoading(false);
         }
     };

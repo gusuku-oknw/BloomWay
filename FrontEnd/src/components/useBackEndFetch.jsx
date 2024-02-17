@@ -57,39 +57,33 @@ const useBackEndFetch = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(args), // スプレッド演算子を除去し、直接argsを使用
+                body: JSON.stringify(args),
             });
 
             if (!response.ok) {
-                // HTTPステータスコードが成功を示さない場合、エラーを投げる
                 throw new Error(`HTTP error! status: ${response.status} ${response.statusText}`);
             }
 
             const contentType = response.headers.get('content-type');
             if (!contentType || !contentType.includes('application/json')) {
-                // 応答がJSON形式でない場合、エラーを投げる
                 throw new Error("Oops, we haven't got JSON!");
             }
 
-            const responseData = await response.json(); // 応答データをJSONとして解析
+            const responseData = await response.json();
 
             if (responseData.error) {
-                // サーバーからの応答にエラーが含まれている場合、エラーを投げる
                 throw new Error('Error from server: ' + responseData.error);
             } else {
-                // エラーがない場合、応答データを設定
-                setData(responseData);
-                return responseData; // 成功したレスポンスデータを返す
+                setData(responseData); // Assuming setData updates your state with the response data
+                return responseData;
             }
         } catch (error) {
-            // エラーハンドリング
-            setError("Error during data fetch: " + error.message);
+            setError("Error during data fetch: " + error.message); // Assuming setError updates your state to show an error message
             console.error("Error during data fetch:", error);
         } finally {
-            // 処理が終了したらローディング状態を解除
-            setIsLoading(false);
+            setIsLoading(false); // Assuming setIsLoading updates your state to show loading is complete
         }
-    };
+    }
 
     return { sendRequest, isLoading, error, data };
 };
