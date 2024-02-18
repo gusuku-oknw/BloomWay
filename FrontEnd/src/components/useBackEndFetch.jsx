@@ -16,7 +16,7 @@ const useBackEndFetch = () => {
                 try {
                     // ダミーデータ
                     const dummyData = {
-                        message: "セラミドとトラネキサム酸　※実際の結果とは異なります。",
+                        message: "セラミドとトラネキサム酸　で〇〇がおすすめです。",
                         // ダミーの詳細データなど
                     };
                     console.log(args)

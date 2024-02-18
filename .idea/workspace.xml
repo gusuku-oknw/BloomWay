@@ -5,7 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2ee918c6-4fbb-49e7-aca4-db207adf9075" name="変更" comment="">
-      <change beforePath="$PROJECT_DIR$/FrontEnd/src/components/FinalSurvey.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/components/FinalSurvey.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/FrontEnd/src/components/DraggableImage.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/FrontEnd/src/components/Panel.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/public/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/src/components/ChoicesWithFlicking.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/components/ChoicesWithFlicking.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/src/components/SurveyFinished.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/components/SurveyFinished.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FrontEnd/src/components/useBackEndFetch.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/components/useBackEndFetch.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -17,6 +22,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="JSX File" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
@@ -34,17 +40,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.app.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/tmkjn/Documents/webapp/Reposit&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.app.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "C:/Users/mi181320/Documents/react/BloomWay/FrontEnd/src/components",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "yarn",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\mi181320\Documents\react\BloomWay\FrontEnd\src\components" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\tmkjn\Documents\webapp\Reposit" />
       <recent name="C:\Users\tmkjn\Documents\webapp\Reposit\BackEnd" />
@@ -59,6 +75,7 @@
       <option name="presentableId" value="Default" />
       <updated>1707912793855</updated>
       <workItem from="1708156245825" duration="10131000" />
+      <workItem from="1708224384004" duration="9082000" />
     </task>
     <servers />
   </component>
