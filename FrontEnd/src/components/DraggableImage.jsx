@@ -1,71 +1,55 @@
-import React, { useState, useEffect } from 'react';
-import { Div } from "atomize";
+import React, { useState } from 'react';
 
-function DraggableImage({ onDragStart, onDragEnd }) {
+const DraggableImage = ({ onDragStart, onDragEnd }) => {
     const [position, setPosition] = useState({ x: 0, y: 0 });
-    const [dragging, setDragging] = useState(false);
-    const [relPosition, setRelPosition] = useState({ x: 0, y: 0 });
 
-    useEffect(() => {
-        const handleMouseMove = (e) => {
-            if (!dragging) return;
+    const dragStart = (e) => {
+        // クリックされた位置から要素の左上隅までのオフセットを計算
+        const elemRect = e.target.getBoundingClientRect();
+        const offsetX = e.clientX - elemRect.left;
+        const offsetY = e.clientY - elemRect.top;
+
+        // ドラッグ開始の処理
+        // setDragging(true);
+        onDragStart();
+
+        // マウスが動いたときのイベント
+        const onMouseMove = (moveEvent) => {
+            // 新しい位置を設定
             setPosition({
-                x: e.clientX - relPosition.x,
-                y: e.clientY - relPosition.y,
+                x: moveEvent.clientX - offsetX,
+                y: moveEvent.clientY - offsetY,
             });
         };
 
-        const handleMouseUp = () => {
+        // マウスボタンを離したときのイベント
+        const onMouseUp = () => {
+            // ドラッグ終了の処理
             setDragging(false);
-            onDragEnd(); // ドラッグ終了時に親コンポーネントへ通知
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+            onDragEnd();
         };
 
-        if (dragging) {
-            document.addEventListener('mousemove', handleMouseMove);
-            document.addEventListener('mouseup', handleMouseUp);
-        }
-
-        return () => {
-            document.removeEventListener('mousemove', handleMouseMove);
-            document.removeEventListener('mouseup', handleMouseUp);
-        };
-    }, [dragging, relPosition.x, relPosition.y, onDragEnd]);
-
-    const onMouseDown = (e) => {
-        // ドラッグ開始時に親コンポーネントへ通知
-        onDragStart();
-        // ドラッグ開始処理
-        setDragging(true);
-        setRelPosition({
-            x: e.clientX - position.x,
-            y: e.clientY - position.y,
-        });
-        e.preventDefault();
+        // ドキュメントにイベントリスナーを追加
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
     };
 
     return (
-        <Div
-            onMouseDown={onMouseDown}
+        <div
             style={{
-                width: '100%',
-                height: '100%',
-                position: 'relative',
-                overflow: 'hidden',
+                position: 'absolute',
+                left: `${position.x}px`,
+                top: `${position.y}px`,
+                cursor: 'grab',
             }}
+            onMouseDown={dragStart}
         >
-            <img
-                src="" // 画像のURLを設定
-                className="draggableImage"
-                style={{
-                    position: 'absolute',
-                    cursor: 'move',
-                    left: `${position.x}px`,
-                    top: `${position.y}px`,
-                }}
-                alt="Draggable"
-            />
-        </Div>
+            {/* 画像のソースを指定し、draggable属性をfalseに設定 */}
+            <img src="path-to-your-image.jpg" alt="Draggable" draggable="false" />
+        </div>
     );
-}
+};
 
 export default DraggableImage;

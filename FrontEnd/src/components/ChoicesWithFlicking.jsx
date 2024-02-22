@@ -107,8 +107,9 @@ export default function ChoicesWithFlicking() {
                     key={panelIndex}
                 >
                     {panel.type === "draggableImage" ? (
+                        <>
                             <DraggableImage onDragStart={handleDragStart} onDragEnd={handleDragEnd} />
-
+                        </>
                     ) : (
                         <>
                             <Div
