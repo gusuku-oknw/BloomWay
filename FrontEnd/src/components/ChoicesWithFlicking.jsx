@@ -8,12 +8,13 @@ import FinalSurvey from "./FinalSurvey";
 import useBackEndFetch from "./useBackEndFetch";
 import SurveyFinished from "./SurveyFinished";
 import DraggableImage from "./DraggableImage";
+import SelectTable from './SelectTable'; // SelectTable コンポーネントのファイルパスに応じて調整してください
 
 export default function ChoicesWithFlicking() {
     const { sendRequest, isLoading, error, data } = useBackEndFetch();
 
     const [panels, setPanels] = useState([
-        { question: "お好みの化粧品の位置を選んでください", type: "draggableImage" }, // DraggableImageタイプの質問を追加
+        { question: "お好みの化粧品の位置を選んでください", type: "selectTable" },
         { question: "年齢は？", options: ["20代", "30代"], selectedOptionIndex: null, type: "choice" },
         { question: "肌悩みは?", options: ["敏感肌", "乾燥", "シワ・たるみ", "シミ・くすみ", "毛穴・ニキビ"], selectedOptionIndex: null, type: "choice" },
         { question: "肌はかさつきやすいですか？", options: ["カサつきを繰り返している", "たまにカサつく", "カサつかない"], selectedOptionIndex: null, type: "choice" },
@@ -106,10 +107,10 @@ export default function ChoicesWithFlicking() {
                     justify="start"
                     key={panelIndex}
                 >
-                    {panel.type === "draggableImage" ? (
-                        <>
-                            <DraggableImage onDragStart={handleDragStart} onDragEnd={handleDragEnd} />
-                        </>
+                    {panel.type === "selectTable" ? (
+                        <Div>
+                            <SelectTable x={5} y={3} />
+                        </Div>
                     ) : (
                         <>
                             <Div
