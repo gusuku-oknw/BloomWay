@@ -26,20 +26,11 @@ export default function ChoicesWithFlicking() {
     const navigate = useNavigate(); // React Router v6
     const flickingRef = useRef(null);
 
-    const [flickingEnabled, setFlickingEnabled] = useState(true);
+    const labels = [
+        { x: null, y: 3, text: "Example Y-axis Label" },
+        { x: 2, y: null, text: "Example X-axis Label" }
+    ];
 
-    const handleDragStart = () => {
-        setFlickingEnabled(false); // ドラッグ開始時にFlickingを無効化
-    };
-
-    const handleCompleteButtonClick = () => {
-        setIsCompleted(true); // 完了状態をtrueに更新
-        navigate('/next-page'); // React Router v6の場合
-    };
-    const handleDragEnd = () => {
-        setFlickingEnabled(true); // ドラッグ終了時にFlickingを再び有効化
-        setIsCompleted(false); // ユーザーが画像を移動したら完了状態をリセット
-    };
     const handleButtonClick = () => {
         setIsQuestionnaire(true);
     };
@@ -109,7 +100,7 @@ export default function ChoicesWithFlicking() {
                 >
                     {panel.type === "selectTable" ? (
                         <Div>
-                            <SelectTable x={5} y={3} />
+                            <SelectTable x={5} y={5} labels={labels} />
                         </Div>
                     ) : (
                         <>
