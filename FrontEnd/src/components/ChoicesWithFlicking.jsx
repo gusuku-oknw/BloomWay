@@ -14,13 +14,13 @@ export default function ChoicesWithFlicking() {
     const { sendRequest, isLoading, error, data } = useBackEndFetch();
 
     const [panels, setPanels] = useState([
-        { question: "年齢は？", options: ["20代", "30代"], selectedOptionIndex: null, type: "choice" },
-        { question: "肌悩みは?", options: ["敏感肌", "乾燥", "シワ・たるみ", "シミ・くすみ", "毛穴・ニキビ"], selectedOptionIndex: null, type: "choice" },
-        { question: "肌はかさつきやすいですか？", options: ["カサつきを繰り返している", "たまにカサつく", "カサつかない"], selectedOptionIndex: null, type: "choice" },
         { question: "お好みの化粧品の位置を選んでください", selectedOptionIndex: null, type: "selectTable", labels: [
                 { x: null, y: 3, text: "Example Y-axis Label" },
                 { x: 2, y: null, text: "Example X-axis Label" }
-            ] }
+            ] },
+        { question: "年齢は？", options: ["20代", "30代"], selectedOptionIndex: null, type: "choice" },
+        { question: "肌悩みは?", options: ["敏感肌", "乾燥", "シワ・たるみ", "シミ・くすみ", "毛穴・ニキビ"], selectedOptionIndex: null, type: "choice" },
+        { question: "肌はかさつきやすいですか？", options: ["カサつきを繰り返している", "たまにカサつく", "カサつかない"], selectedOptionIndex: null, type: "choice" },
     ]);
 
     const [isSurveyFinished, setIsSurveyFinished] = useState(false);
@@ -79,17 +79,16 @@ export default function ChoicesWithFlicking() {
             />
         );
     }
-    const handleCellSelect = (row, col) => {
-        // selectTable タイプの質問のインデックスを見つける
-        const panelIndex = panels.findIndex(panel => panel.type === "selectTable");
 
-        if (panelIndex === -1) return; // selectTable タイプの質問が見つからなければ何もしない
+    const handleCellSelect = (panelIndex, row, col) => {
+        // selectTable タイプの質問のインデックスを見つける
+        // const panelIndex = panels.findIndex(panel => panel.type === "selectTable");
 
         // ここでは、row と col を直接 optionIndex として使用します
         // 実際のマッピングロジックはアプリケーションの要件によります
-        const optionIndex = row; // 例として row を optionIndex とする（実際には適切にマッピングする必要がある）
+        const optionIdentifier = `${row}-${col}`;
 
-        moveToNextPanel(panelIndex, optionIndex);
+        moveToNextPanel(panelIndex, optionIdentifier);
     };
 
     return (
@@ -116,6 +115,14 @@ export default function ChoicesWithFlicking() {
                 >
                     {panel.type === "selectTable" ? (
                         <Div>
+                            <Div
+                                textAlign="center"
+                                textWeight="800"
+                                textSize="title"
+                                style={{ width: '100%', textAlign: 'center', marginBottom: '2rem' }}
+                            >
+                                {panel.question}
+                            </Div>
                             <SelectTable
                                 key={panelIndex}
                                 x={5} // 仮の値、実際には適切な値を設定する必要があります
