@@ -1,43 +1,52 @@
 import React, { useState } from 'react';
+import { Div } from "atomize";
+import point from "./point.svg";
 
 const DraggableImage = ({ onDragStart, onDragEnd }) => {
     const [position, setPosition] = useState({ x: 0, y: 0 });
 
     const dragStart = (e) => {
-        // クリックされた位置から要素の左上隅までのオフセットを計算
         const elemRect = e.target.getBoundingClientRect();
-        const offsetX = e.clientX - elemRect.left;
-        const offsetY = e.clientY - elemRect.top;
+        // 画像の中心を計算するために幅と高さの半分を取得
+        const centerX = elemRect.width / 2;
+        const centerY = elemRect.height / 2;
 
-        // ドラッグ開始の処理
-        // setDragging(true);
+        const clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+        const clientY = e.type.includes('mouse') ? e.clientY : e.touches[0].clientY;
+
+        // 中心からのオフセットを計算
+        const offsetX = clientX - elemRect.left - centerX;
+        const offsetY = clientY - elemRect.top - centerY;
+
         onDragStart();
 
-        // マウスが動いたときのイベント
-        const onMouseMove = (moveEvent) => {
-            // 新しい位置を設定
+        const onMove = (moveEvent) => {
+            const moveX = moveEvent.type.includes('mouse') ? moveEvent.clientX : moveEvent.touches[0].clientX;
+            const moveY = moveEvent.type.includes('mouse') ? moveEvent.clientY : moveEvent.touches[0].clientY;
+
+            // 画像を中心に設定するために、オフセットを引きます
             setPosition({
-                x: moveEvent.clientX - offsetX,
-                y: moveEvent.clientY - offsetY,
+                x: moveX - offsetX - centerX,
+                y: moveY - offsetY - centerY,
             });
         };
 
-        // マウスボタンを離したときのイベント
-        const onMouseUp = () => {
-            // ドラッグ終了の処理
-            setDragging(false);
-            document.removeEventListener('mousemove', onMouseMove);
-            document.removeEventListener('mouseup', onMouseUp);
+        const onEnd = () => {
+            document.removeEventListener('mousemove', onMove);
+            document.removeEventListener('mouseup', onEnd);
+            document.removeEventListener('touchmove', onMove);
+            document.removeEventListener('touchend', onEnd);
             onDragEnd();
         };
 
-        // ドキュメントにイベントリスナーを追加
-        document.addEventListener('mousemove', onMouseMove);
-        document.addEventListener('mouseup', onMouseUp);
+        document.addEventListener('mousemove', onMove);
+        document.addEventListener('mouseup', onEnd);
+        document.addEventListener('touchmove', onMove, { passive: false });
+        document.addEventListener('touchend', onEnd);
     };
 
     return (
-        <div
+        <Div
             style={{
                 position: 'absolute',
                 left: `${position.x}px`,
@@ -45,10 +54,15 @@ const DraggableImage = ({ onDragStart, onDragEnd }) => {
                 cursor: 'grab',
             }}
             onMouseDown={dragStart}
+            onTouchStart={dragStart}
         >
-            {/* 画像のソースを指定し、draggable属性をfalseに設定 */}
-            <img src="path-to-your-image.jpg" alt="Draggable" draggable="false" />
-        </div>
+            <img
+                src={point}
+                alt="Draggable"
+                draggable="false"
+                style={{ width: '100px', height: '100px' }} // 画像のサイズ指定
+            />
+        </Div>
     );
 };
 

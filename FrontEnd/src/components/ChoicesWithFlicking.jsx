@@ -7,17 +7,20 @@ import "@egjs/react-flicking/dist/flicking.css";
 import FinalSurvey from "./FinalSurvey";
 import useBackEndFetch from "./useBackEndFetch";
 import SurveyFinished from "./SurveyFinished";
-import DraggableImage from "./DraggableImage";
+// import DraggableImage from "./DraggableImage";
 import SelectTable from './SelectTable'; // SelectTable コンポーネントのファイルパスに応じて調整してください
 
 export default function ChoicesWithFlicking() {
     const { sendRequest, isLoading, error, data } = useBackEndFetch();
 
     const [panels, setPanels] = useState([
-        { question: "お好みの化粧品の位置を選んでください", type: "selectTable" },
         { question: "年齢は？", options: ["20代", "30代"], selectedOptionIndex: null, type: "choice" },
         { question: "肌悩みは?", options: ["敏感肌", "乾燥", "シワ・たるみ", "シミ・くすみ", "毛穴・ニキビ"], selectedOptionIndex: null, type: "choice" },
         { question: "肌はかさつきやすいですか？", options: ["カサつきを繰り返している", "たまにカサつく", "カサつかない"], selectedOptionIndex: null, type: "choice" },
+        { question: "お好みの化粧品の位置を選んでください", selectedOptionIndex: null, type: "selectTable", labels: [
+                { x: null, y: 3, text: "Example Y-axis Label" },
+                { x: 2, y: null, text: "Example X-axis Label" }
+            ] }
     ]);
 
     const [isSurveyFinished, setIsSurveyFinished] = useState(false);
@@ -39,6 +42,7 @@ export default function ChoicesWithFlicking() {
         // 選択肢の選択を更新
         const updatedPanels = panels.map((panel, idx) => {
             if (idx === panelIndex) {
+                // selectTable の場合、selectedOptionIndex に optionIndex を設定
                 return { ...panel, selectedOptionIndex: optionIndex };
             }
             return panel;
@@ -75,6 +79,18 @@ export default function ChoicesWithFlicking() {
             />
         );
     }
+    const handleCellSelect = (row, col) => {
+        // selectTable タイプの質問のインデックスを見つける
+        const panelIndex = panels.findIndex(panel => panel.type === "selectTable");
+
+        if (panelIndex === -1) return; // selectTable タイプの質問が見つからなければ何もしない
+
+        // ここでは、row と col を直接 optionIndex として使用します
+        // 実際のマッピングロジックはアプリケーションの要件によります
+        const optionIndex = row; // 例として row を optionIndex とする（実際には適切にマッピングする必要がある）
+
+        moveToNextPanel(panelIndex, optionIndex);
+    };
 
     return (
         <Flicking
@@ -100,7 +116,13 @@ export default function ChoicesWithFlicking() {
                 >
                     {panel.type === "selectTable" ? (
                         <Div>
-                            <SelectTable x={5} y={5} labels={labels} />
+                            <SelectTable
+                                key={panelIndex}
+                                x={5} // 仮の値、実際には適切な値を設定する必要があります
+                                y={5} // 仮の値、実際には適切な値を設定する必要があります
+                                labels={panel.labels}
+                                onCellSelect={(row, col) => handleCellSelect(panelIndex, row, col)}
+                            />
                         </Div>
                     ) : (
                         <>
@@ -126,6 +148,8 @@ export default function ChoicesWithFlicking() {
                                         bg={panel.selectedOptionIndex === optionIndex ? "success300" : "info400"}
                                         hoverBg={panel.selectedOptionIndex === optionIndex ? "success600" : "info600"}
                                         rounded="md"
+                                        shadow="5"
+                                        hoverShadow="0"
                                         m={{ b: "1rem", r: "0.5rem", l: "0.5rem" }}
                                         p={{ x: "1.5rem", y: "1.5rem" }}
                                         w={panel.options.length === 2 ? "100%" : "calc(50% - 1rem)"} // 2x1の場合は全幅、2x2の場合は半分の幅

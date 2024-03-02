@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 
-function SelectTable({ x, y, labels }) {
+function SelectTable({ x, y, labels, onCellSelect }) {
     const [selectedCell, setSelectedCell] = useState({ x: null, y: null });
 
     const handleCellClick = (row, col) => {
         setSelectedCell({ x: col, y: row });
         console.log(`Selected cell: Row ${row}, Col ${col}`);
+        onCellSelect(row, col);
     };
 
     return (
